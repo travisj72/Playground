@@ -1,0 +1,12 @@
+function clean_data($data){
+      $data = trim($data);
+      $replace = ['and', 'or', 'drop', ';', '%', '$'];
+      $data = strtolower($data);
+      foreach($replace as $remove){
+          $data = str_replace($remove, "", $data);
+      }
+      $data = trim($data);
+      $data = stripslashes($data);
+      $data = htmlspecialchars($data);
+      return $data;
+  }  
