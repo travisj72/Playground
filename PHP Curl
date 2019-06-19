@@ -1,0 +1,13 @@
+    function editTable($url, $mod, $my_data){
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $mod); // $mod can be POST, GET, DELETE, etc.
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($my_data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Accepts: application/json',
+                'verbosity: 4' ));
+        $result = curl_exec($ch);
+        $json = json_decode($result, true);
+        return $json;
+    }
