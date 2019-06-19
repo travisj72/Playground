@@ -1,0 +1,62 @@
+    # Need to pass an ini file, the section you want to add to or create, a key and a value.
+    
+    function add_ini($file, $section, $key, $value) {
+        $config_data = parse_ini_file($file, true);
+        if (empty($config_data[$section][$key])) {
+            $config_data[$section][$key] = $value;
+        } else {
+            $config_data[$section][$key] .= ', ' . $value;
+        }    
+        $new_content = '';
+        foreach ($config_data as $section => $section_content) {
+            $section_content = array_map(function($value, $key) {
+                return "$key=$value";
+            }, array_values($section_content), array_keys($section_content));
+            $section_content = implode("\n", $section_content);
+            $new_content .= "[$section]\n$section_content\n";
+        }
+        file_put_contents($file, $new_content);
+    }
+
+    function remove_ini($file, $section, $key, $value, $delimiter = ', ') {
+        $ini = parse_ini_file($file, true);
+
+        if (!isset($ini[$section]) or !isset($ini[$section][$key])){
+            return false;
+        }
+
+        $values = explode($delimiter, $ini[$section][$key]);
+        $values = array_diff($values, [$value]);
+        $values = implode($delimiter, $values);
+
+        if ($values) {
+            $ini[$section][$key] = $values;
+        } else {
+            unset($ini[$section][$key]);
+        }
+
+        $output = [];
+
+        foreach ($ini as $section => $values) {
+            $output[] = "[$section]";
+
+            foreach ($values as $key => $val) {
+                $output[] = "$key = $val";
+            }
+        }
+
+        $output = implode(PHP_EOL, $output);
+
+        return file_put_contents($file, $output);
+    }
+
+    function check_dupe($file, $section, $key, $key_value){
+        $raw_data = parse_ini_file($file,true);
+        $data = $raw_data[$section][$key];
+        $names = explode(", ", $data);
+        if(in_array($key_value, $names)){
+            return false;
+        } else {
+            return true;
+        }
+    }
