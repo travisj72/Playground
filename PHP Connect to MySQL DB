@@ -1,0 +1,19 @@
+$servername = "localhost";
+$username = "username";
+$password = "password";
+$dbname = "database";
+
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+if (!$conn){
+    die("<BR><BR>Connection Failed: ". mysqli_connect_error());
+}
+
+$sql = "SELECT names, ids FROM local_table";
+$result = mysqli_query($conn, $sql);
+while($row = mysqli_fetch_array($result)) {
+    $names[] = $row["names"];
+    $ids[] = $row["ids"];
+}
+$conn->close();
+
+//Do fun stuff with $names and $ids! 
