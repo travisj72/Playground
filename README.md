@@ -1,9 +1,8 @@
-# DatabasePlayground
-Playground for PHP, Python and SQL 
-
+# Playground
+Playground for PHP, Python, SQL and anything else! 
+This is my area to learn new things and keep things for later use!
 
 These files contain functions that I have created to do specific things inside of php web pages, or for pulling data into databases.
-
 # PHP Curl
 PHP Curl is a call to a rest interface with a Curl. This function needs a url for the rest interface, the type of operation (POST, GET, DELETE ... ) and the data that goes in the body.
 
