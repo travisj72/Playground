@@ -15,10 +15,10 @@
                 $op = $_POST['convert'];
                 switch ($op){
                     case "Length":
-                        $op_array = ["Kilometer (km)", "Meter (m)", "Centimeter (cm)", "MilliMeter (mm)", "Micron (µ)", "MilliMicron (mµ)", "Angstrom (A)", "Inch (in)", "Foot (ft)", "Mile (mi)"];
+                        $op_array = ["Kilometer (km)", "Meter (m)", "Centimeter (cm)", "MilliMeter (mm)", "Micron (µ)", "MilliMicron (mµ)", "Inch (in)", "Foot (ft)", "Yard (yd)", "Mile (mi)"];
                         break;
                     case "Mass":
-                        $op_array = ["Kilogram (kg)", "Pound (lb)", "Slug", "Gram (gm)"];
+                        $op_array = ["Kilogram (kg)", "Pound (lb)", "Gram (gm)"];
                         break;
                     case "Area":
                         $op_array = ["Square Meter (m^2)", "Square Mile (mi^2)", "Square Foot (ft^2)", "Acre"];
@@ -30,7 +30,7 @@
                         $op_array = ["km/h", "m/sec", "mi/h", "ft/sec"];
                         break;
                     case "Density":
-                        $op_array = ["gm/cm^3", "kg/m^3", "lb/ft^3", "slug/ft^3", "gm/cm^3"];
+                        $op_array = ["gm/cm^3", "kg/m^3", "lb/ft^3", "gm/cm^3"];
                         break;
                     case "Force":
                         $op_array = ["Newton (nt)", "dynes", "kgwt", "lbwt", "U.S. short ton", "long ton", "metric ton"];
@@ -47,7 +47,7 @@
                 }
             } else {
                 $_POST['convert'] = 'Length';
-                $op_array = ["Kilometer (km)", "Meter (m)", "Centimeter (cm)", "MilliMeter (mm)", "Micron (µ)", "MilliMicron (mµ)", "Angstrom (A)", "Inch (in)", "Foot (ft)", "Mile (mi)"];
+                $op_array = ["Kilometer (km)", "Meter (m)", "Centimeter (cm)", "MilliMeter (mm)", "Micron (µ)", "MilliMicron (mµ)", "Inch (in)", "Foot (ft)", "Yard (yd)", "Mile (mi)"];
             }
             
             if(isset($_POST['convert_from'])){
@@ -116,7 +116,6 @@
                                 <button type="submit" class="btn btn-primary mb-2">Calculate</button>
                             </div>
                         </div>
-
                 </form>
             </div>
         </div> 
@@ -125,14 +124,45 @@
         <?php
             if(isset($conv_val) && $conv_val != "" ){
                 echo "<h2 align='center'>Converting $conv_val $measure1 to $measure2</h2>";
-                math1234($op, $conv_val, $measure1, $measure2);
+                $woo = math1234($op, $conv_val, $measure1, $measure2);
+                echo "<h1> $woo $measure2 </h1>";
             }
 
             function math1234($op, $conv_val, $measure1, $measure2){
                 switch ($op){
                     case "Length":
+                        $km = [1, 1000, 10000, 100000, 1000000, 39.37, 3.28, 1.093, 0.00062]; // km -> m -> cm -> mm -> mu -> in -> ft -> yard -> mi
+                        $m = [1000, 1, ];
+                        $cm = [];
+                        $mm = [];
+                        $mu = [];
+                        $in = [];
+                        $ft = [0.0003048, 0.3048, smol, smoler , smolest, 12, 1, .3, 5280];
+                        $yd = [.0009, .9, smol, smoler, smolest, 36, 3, 0.0005681];
+                        $mi = [];
                         break;
                     case "Mass":
+                        $kg = [1, 2.2046, 1000];  //kg -> pound -> gram
+                        $lb = [0.4535, 1, 453.6]; //kg -> pound -> gram
+                        $gm = [0.001, 0.0022, 1]; //kg -> pound -> gram
+                        switch ($measure1){
+                            case "Kilogram (kg)":
+                                $math_array = $kg;
+                                break;
+                            case "Pound(lb)":
+                                $math_array = $lb;
+                                break;
+                            case "Gram (gm)":
+                                $math_array = $gm;
+                                break;
+                        }
+                        if ($measure2 == "Kilogram (kg)"){
+                            return $math_array[0] * $conv_val;
+                        } else if ($measure2 == "Pound (lb)"){
+                            return $math_array[1] * $conv_val;
+                        } else if ($measure2 == "Gram (gm)"){
+                            return $math_array[2] * $conv_val;
+                        }
                         break;
                     case "Area":
                         break;
@@ -147,7 +177,27 @@
                     case "Energy":
                         break;
                     case "Power":
-                        break;
+                        $w = [1, 0.0013, 1000];   // watt -> horsepower -> kilowatt
+                        $hp = [745.7, 1, 0.7457]; // watt -> horsepower -> kilowatt
+                        $kw = [1000, 1.3410 , 1]; // watt -> horsepower -> kilowatt
+                        switch ($measure1){
+                            case "Watt (w)":
+                                $math_array = $w;
+                                break;
+                            case "Horsepower (hp)":
+                                $math_array = $hp;
+                                break;
+                            case "Kilowatt (kw)":
+                                $math_array = $kw;
+                                break;
+                        }
+                        if ($measure2 == "Watt (w)"){
+                            return $math_array[0] * $conv_val;
+                        } else if ($measure2 == "Horsepower (hp)"){
+                            return $math_array[1] * $conv_val;
+                        } else if ($measure2 == "Kilowatt (kw)"){
+                            return $math_array[2] * $conv_val;
+                        }
                     case "Pressure":
                         break;
                 }
