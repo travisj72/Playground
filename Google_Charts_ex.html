@@ -1,0 +1,110 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Sales', 'Expenses'],
+          ['2013',  1000,      400],
+          ['2014',  1170,      460],
+          ['2015',  660,       1120],
+          ['2016',  1030,      540]
+        ]);
+
+        var options = {
+          title: 'Company Performance',
+          hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
+          vAxis: {minValue: 0}
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 100%; height: 500px;"></div>
+  </body>
+</html>
+
+/*
+  // get data from a tsv file
+    function getData() {
+        var req = {
+            method: 'POST',
+            url: "datafile.tsv"
+        }
+        $http(req).success(function (data) {
+            drawChart(data);
+        }).error(function (data) {
+            console.log("Error calling getData");
+            console.log(data);
+        });
+    }
+    // Pulls data from the getData() function and stores in table.
+    // Rest of the function is similiar to above draw chart
+    function drawChart(data) {
+        // Create the data table.
+        var table = new google.visualization.DataTable();
+
+        var dataRows = data.split("\n");
+        var headers = dataRows[0].split('\t');
+        headers.unshift('Model-Enclosure');
+        table.addColumn('string', headers[0]);
+        table.addColumn('string', headers[1]);
+        table.addColumn('string', headers[2]);
+        table.addColumn('string', headers[3]);
+        table.addColumn('number', headers[4]);  // min
+        table.addColumn('number', headers[5]);  // avg
+        table.addColumn('number', headers[6]);  // max
+        var rs = [];
+        for (var x = 1; x < (dataRows.length-1); x++) {
+            var cols = dataRows[x].split('\t');
+            var row = [];
+            row.push(cols[0] + '-' + cols[2]);
+            row.push(cols[0]);
+            row.push(cols[1]);
+            row.push(cols[2]);
+            var min = parseInt(cols[3]);
+            var avg = parseInt(cols[4]);
+            var max = parseInt(cols[5]);
+            row.push(min);
+
+            var avgValue = {};
+            avgValue.v = avg - min;
+            avgValue.f = cols[4];
+            row.push(avgValue);
+            if (max < avg) {
+                max = avg + max;
+            }
+            var maxValue = {};
+            maxValue.v = max - avg;
+            maxValue.f = cols[5];
+            row.push(maxValue);
+
+            rs.push(row);
+        }
+        table.addRows(rs);
+  //Sets chart, and chart options
+  var chart = new google.visualization.ChartWrapper({
+      'chartType': 'ColumnChart',
+      'containerId': 'drivetemperature_enclosure',
+      'options': {
+          'left': '25%',
+          'title': 'Title for Chart',
+          'hAxis': { 'X Axis Label' },
+          'vAxis': { 'Y Axis Label' },
+          'height': '80%',
+          'width': '80%',
+          'width': 1200,
+          'height': 600,
+          'isStacked': true, //Stacks bars next to eachother
+          'colors': ['green', 'blue', 'red'] //Choses bar color
+      },
+      'view': { 'columns': [0, 4, 5, 6] } // View only specific columns
+
+  });
+ */
