@@ -20,3 +20,9 @@ This file is just a nifty thing that iterates through everything in your directo
 
 # Gather_Data
 This is my work in process project to gather data from an existing database and table and move it to a new database and table. It will log everything in a certain destination and then it will time the total process of this. It will create the new table if it is not there, else it will just update it.
+
+# Converter.php
+This is my basic building block to do unit conversions on the web. I am creating this for engineering students like myself to use. Still under construction has partial functionality
+
+# Python Challenges
+My attempts at practical python challenges to test and increase my skill.
