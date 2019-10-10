@@ -22,10 +22,12 @@ void error(const char *msg) {
 	exit(1);
 }
 
-void *threadFunct(int mySockfd) {
+void *threadFunct(void *arg) {
+    int mySockfd;
 	char buffer2[256];	
 	bool exit = false;
 	int read_writeLen;
+    mySockfd = *((int *)arg);
 	while(!exit) {
 		bzero(buffer2, 256);
  		read_writeLen = read(mySockfd, buffer2, 255);
@@ -80,7 +82,7 @@ int main(int argc, char *argv[]) {
 		newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
 		if(newsockfd<0)
 			error("ERROR on accept");
-	    pthread_create(&threadId, NULL, threadFunct, newsockfd);
+	    pthread_create(&threadId, NULL, threadFunct, &newsockfd);
 	}
 
 	close(sockfd);
