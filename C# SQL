@@ -1,0 +1,33 @@
+string connection_string = "Server =; Database =; User Id =; Password =";
+string sql = "SELECT * FROM my_table WHERE ColumnHeader = @val1"; // For Read only query
+string sql = $@"MERGE Target_Table as target
+                 USING ( SELECT @col1, @col2, @col3, @col4, @col5 )
+                 AS source ( Col1, Col2, Col3, Col4, Col5 )
+                 ON ( target.Col1 = source.Col1 AND target.Col2 = source.Col2 )
+                 WHEN NOT MATCHED THEN
+                     INSERT ( Col1, Col2, Col3, Col4, Col5 )
+                     VALUES ( @col1, @col2, @col3, @col4, @col5 );"; // For INSERTS
+
+using (SqlConnection connection = new SqlConnection(connection_string))
+using (SqlCommand command = new SqlCommand(sql, connection))
+{
+    connection.Open();
+    // Add Parameters to SQL Query
+    command.Parameters.AddWithValue("@val1", my_variable);
+    
+    // READ ONLY PART!
+    using (SqlDataReader reader = command.ExecuteReader())
+    {
+        while(reader.Read())
+            //do stuff with reader["ColumnHeader"].ToString();
+    }
+    
+    // INSERT
+    try
+    {
+        command.ExecuteNonQuery();
+    }
+    catch (Exception ex)
+    {
+        // Do your exception
+    }
