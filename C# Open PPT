@@ -1,0 +1,39 @@
+// Need to add these two namespaces
+using Microsoft.Office.Interop.PowerPoint;
+using Microsoft.Office.Core;
+
+public static bool findppt(string key)
+{
+    string path = @"C:\Users\Path\To\File\";
+    DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo(@"C:\Users\Path\To\File\");
+    // We are looking through the directory, seeing if the key
+    FileInfo[] filesInDir = hdDirectoryInWhichToSearch.GetFiles("*" + key + "*.*");
+    string fullName = "";
+    foreach (FileInfo foundFile in filesInDir)
+    {
+        fullName = foundFile.FullName;
+        MessageBox.Show(fullName);
+    }
+    // if the filename is found, open the ppt
+    if (fullName != "")
+    {
+        Microsoft.Office.Interop.PowerPoint.Application pptApp = new Microsoft.Office.Interop.PowerPoint.Application();
+        Microsoft.Office.Core.MsoTriState ofalse = Microsoft.Office.Core.MsoTriState.msoFalse;
+        Microsoft.Office.Core.MsoTriState otrue = Microsoft.Office.Core.MsoTriState.msoTrue;
+        pptApp.Visible = otrue;
+        pptApp.Activate();
+        Microsoft.Office.Interop.PowerPoint.Presentations ps = pptApp.Presentations;
+        path = fullName;
+        //path = path + fullName;
+        Console.WriteLine(path);
+        Microsoft.Office.Interop.PowerPoint.Presentation p = ps.Open(path, ofalse, ofalse, otrue);
+        System.Diagnostics.Debug.Print(p.Windows.Count.ToString());
+        return true;
+    }
+    else
+    {
+        MessageBox.Show("Key not found. Please check the directory for missing Key.");
+        return false;
+    }
+    return false;
+}
