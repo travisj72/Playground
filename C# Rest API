@@ -1,0 +1,27 @@
+// Creating a C# request
+
+// Get the request after task run
+var result = Task.Run(async () => await MakeRequest().Result;
+
+
+static async Task<string> MakeRequest()
+{
+    var client = new HttpClient();
+    client.DefaultRequestHeaders.Add("Key_Type", "Key");
+    var uri = "";
+    
+    HttpResponseMessage response = "";
+    
+    // Request Body
+    byte[] byteData = Encoding.UTF8.GetBytes("{\"body_data1\": \"" + val + ""}");
+    
+    using (var content = new ByteArrayContent(byteData))
+    {
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        response = await client.PostAsync(uri, content);
+    }
+    
+    string out_data = await response.Content.ReadAsStringAsync();
+    
+    return out_data;
+}
